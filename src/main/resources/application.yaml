@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: PokemonDeckVault
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost/pokemondeckvault?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+    username: user
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+security:
+  jwt:
+    secretKey: 276d592e16990226290832c9a307bf1df0953e521166fc1b7afd9d3379470c560de75621
+    jwtExpiration: 3600000
