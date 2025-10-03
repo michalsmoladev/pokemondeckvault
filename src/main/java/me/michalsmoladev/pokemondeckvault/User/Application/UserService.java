@@ -4,6 +4,7 @@ import me.michalsmoladev.pokemondeckvault.Core.Application.JWT.JwtService;
 import me.michalsmoladev.pokemondeckvault.User.Application.DTO.LoginUserDTO;
 import me.michalsmoladev.pokemondeckvault.User.Application.DTO.RegisterUserDTO;
 import me.michalsmoladev.pokemondeckvault.User.Application.DTO.UpdateUserDTO;
+import me.michalsmoladev.pokemondeckvault.User.Application.DTO.UserDTO;
 import me.michalsmoladev.pokemondeckvault.User.Domain.Entity.User;
 import me.michalsmoladev.pokemondeckvault.User.Domain.Entity.UserRepositoryInterface;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -34,6 +36,7 @@ public class UserService {
         user.setUsername(userDTO.username);
         user.setPassword(this.encodePassword(userDTO.password));
         user.setEmail(userDTO.email);
+        user.setRole("USER_ROLE");
 
         this.userRepository.save(user);
     }
@@ -66,6 +69,26 @@ public class UserService {
         user.get().setPassword(this.encodePassword(updateUserDTO.password));
 
         userRepository.save(user.get());
+    }
+
+    public void removeUser(UUID id) {
+        Optional<User> user = this.userRepository.findById(id);
+
+        if (user.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        this.userRepository.deleteById(id);
+    }
+
+    public UserDTO getUser(UUID id) {
+        Optional<User> user = this.userRepository.findById(id);
+
+        if (user.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        return UserDTO.fromEntity(user.get());
     }
 
     private String encodePassword(String password) {

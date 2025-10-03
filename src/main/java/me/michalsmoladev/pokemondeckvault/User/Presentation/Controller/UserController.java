@@ -1,9 +1,6 @@
 package me.michalsmoladev.pokemondeckvault.User.Presentation.Controller;
 
-import me.michalsmoladev.pokemondeckvault.User.Application.DTO.LoginUserDTO;
-import me.michalsmoladev.pokemondeckvault.User.Application.DTO.RegisterUserDTO;
-import me.michalsmoladev.pokemondeckvault.User.Application.DTO.TokenDTO;
-import me.michalsmoladev.pokemondeckvault.User.Application.DTO.UpdateUserDTO;
+import me.michalsmoladev.pokemondeckvault.User.Application.DTO.*;
 import me.michalsmoladev.pokemondeckvault.User.Application.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +33,17 @@ public class UserController {
         this.userService.updateUser(updateUserDTO);
 
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/api/user/{id}")
+    public ResponseEntity<Void> deleteUserAction(@PathVariable String id) {
+        this.userService.removeUser(UUID.fromString(id));
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/api/user/{id}")
+    public ResponseEntity<UserDTO> getUserAction(@PathVariable String id) {
+        return ResponseEntity.ok(this.userService.getUser(UUID.fromString(id)));
     }
 }
